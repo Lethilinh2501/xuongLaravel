@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('address')->nullable(); // Địa chỉ, có thể để trống
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade'); // Vai trò người dùng
             $table->tinyInteger('status')->default(1); // Trạng thái tài khoản, mặc định là 1 (hoạt động)
-        
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

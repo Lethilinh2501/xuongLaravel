@@ -12,7 +12,8 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::factory()->count(5)->create(); // Khai báo trong Seeder
-
+        // Role::truncate(); // Xóa dữ liệu cũ trước khi thêm mới
+        Role::create(['name' => 'User']);
+        Role::create(['name' => 'Admin']);
     }
 }

@@ -11,8 +11,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Định nghĩa alias cho middleware
+        $middleware->alias([
+            'role'            => \App\Http\Middleware\RoleMiddleware::class,
+            'verify'          => \App\Http\Middleware\VerifyCustomMiddleware::class,
+            'verify-register' => \App\Http\Middleware\RegisterMiddleware::class,
+            'verify-register2'=> \App\Http\Middleware\Register2Middleware::class,
+        ]);
     })
+    
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

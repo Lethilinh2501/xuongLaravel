@@ -14,7 +14,7 @@ class UploadFileFactory extends Factory
         return [
             'user_id' => User::inRandomOrder()->first()->id ?? User::factory(), // Lấy user ngẫu nhiên hoặc tạo mới
             'file_name' => $this->faker->word . '.' . $this->faker->fileExtension(),
-            'file_path' => 'uploads/' . $this->faker->uuid . '.' . $this->faker->fileExtension(),
+            'file_path' => $this->faker->imageUrl(640, 480, 'cats', true,'Faker'),
             'file_type' => $this->faker->mimeType,
         ];
     }

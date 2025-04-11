@@ -15,4 +15,12 @@ class Post extends Model
         'title',
         'content'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+    public function post_comment()
+    {
+        return $this->hasMany(PostComment::class, 'post_id', 'id');
+    }
 }

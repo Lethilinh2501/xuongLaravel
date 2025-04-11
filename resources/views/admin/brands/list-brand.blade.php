@@ -69,14 +69,12 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $value->name }}</td>
-                                    {{-- <td>{{ $value->logo }}</td> --}}
-                                    <td><img src="{{ asset($value->logo) }}" alt="" width="120"></td>
+                                    <td><img src="{{ asset('storage/' . $value->logo) }}" alt="Brand Logo" width="120"></td>
                                     <td>
                                         <a href="{{ route('admin.brands.detailBrand', $value->id) }}"
                                             class="btn btn-primary btn-sm">Chi tiết</a>
                                         <a href="{{ route('admin.brands.updateBrand', $value->id) }}"
                                             class="btn btn-warning btn-sm">Sửa</a>
-                                        {{-- <button class="btn btn-warning btn-sm">Sửa</button> --}}
                                         <form id="delete-brand-form-{{ $value->id }}"
                                             action="{{ route('admin.brands.deleteBrand', ['idBrand' => $value->id]) }}"
                                             method="POST" style="display: inline;">

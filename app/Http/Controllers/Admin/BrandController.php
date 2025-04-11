@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class BrandController extends Controller
 {
@@ -22,20 +23,18 @@ class BrandController extends Controller
     public function addPostBrand(Request $req)
     {
         $linkImage = "";
-        if ($req->hasFile('imageSP')) {
-            $image = $req->file('imageSP');
+        if ($req->hasFile('logo')) {
+            $image = $req->file('logo');
             $newName = time() . "_" . $image->getClientOriginalName();
-            $linkStogate = 'uploads/brands/';
-            $image->move(public_path($linkStogate), $newName);
-
-            $linkImage = $linkStogate . $newName;
+            $linkStorage = 'uploads/brands/';
+            $image->move(public_path($linkStorage), $newName);
+            $linkImage = $linkStorage . $newName;
         }
 
-        $data = [
+        Brand::create([
             'name' => $req->nameSP,
             'logo' => $linkImage,
-        ];
-        Brand::create($data);
+        ]);
         return redirect()->route('admin.brands.listBrand')->with([
             'message' => 'Thêm mới thành công'
         ]);
@@ -78,28 +77,29 @@ class BrandController extends Controller
         return view('admin.brands.update-brand')
             ->with(['brand' => $brand]);
     }
-    
+
     public function updatePatchBrand($idBrand, Request $req)
     {
-        
+
         $brand = Brand::where('id', $idBrand)->first();
         $linkImage = $brand->logo;
 
-        if ($req->hasFile('imageSP')) {
-            File::delete(public_path($brand->logo)); // xóa file cũ
+        if ($req->hasFile('logo')) {
+            if (!empty($brand->logo)) {
+                File::delete(public_path($brand->logo));
+            }
 
-            $image = $req->file('imageSP');
+            $image = $req->file('logo');
             $newName = time() . "_" . $image->getClientOriginalName();
-            $linkStogate = 'uploads/brands/';
-            $image->move(public_path($linkStogate), $newName);
-            $linkImage = $linkStogate . $newName;
+            $linkStorage = 'uploads/brands/';
+            $image->move(public_path($linkStorage), $newName);
+            $linkImage = $linkStorage . $newName;
         }
 
-        $data = [
-            'name' => $req->nameSP,
+        $brand->update([
+            'name' => $req->name,
             'logo' => $linkImage,
-        ];
-        Brand::where('id', $idBrand)->update($data);
+        ]);
         return redirect()->route('admin.brands.listBrand')->with([
             'message' => 'Sửa thành công'
         ]);

@@ -45,43 +45,33 @@
 @section('content')
     <main class="container-fluid flex-grow-1">
         <div class="container mt-4">
-            <h2 class="mb-4">Chi Tiết Sản Phẩm</h2>
+            <h2 class="mb-4">Chi Tiết Bài Viết</h2>
             <div class="card p-4">
                 <table class="table table-bordered">
                     <tr>
-                        <th>Tên sản phẩm</th>
-                        <td>{{ $product->name }}</td>
+                        <th>Tên tài khoản</th>
+                        <td>{{ $post->user->name }}</td>
                     </tr>
                     <tr>
-                        <th>Giá</th>
-                        <td>{{ number_format($product->price, 0, ',', '.') }} VNĐ</td>
+                        <th>Tiêu đề</th>
+                        <td>{{ $post->title }}</td>
                     </tr>
                     <tr>
-                        <th>Tồn kho</th>
-                        <td>{{ $product->stock }}</td>
+                        <th>Nội dung</th>
+                        <td>{{ $post->content }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Ngày đăng</th>
+                        <td>{{ $post->created_at }}</td>
                     </tr>
                     <tr>
-                        <th>Danh mục</th>
-                        <td>{{ $product->category->name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Thương hiệu</th>
-                        <td>{{ $product->brand->name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Mô tả</th>
-                        <td>{{ $product->description }}</td>
-                    </tr>
-                    <tr>
-                        <th>Hình ảnh</th>
-                        <td>
-                            <img src="{{ asset('storage/'. $product->image) }}" class="img-thumbnail" width="300">
-                        </td>
+                        <th>ngày sửa</th>
+                        <td>{{ $post->update_at }}</td>
                     </tr>
                 </table>
-                <a href="{{ route('admin.products.listProduct') }}" class="btn btn-primary mt-3">Quay lại</a>
+                <a href="{{ route('admin.posts.listPost') }}" class="btn btn-primary mt-3">Quay lại</a>
             </div>
         </div>
     </main>
 @endsection
-

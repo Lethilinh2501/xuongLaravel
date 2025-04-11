@@ -53,36 +53,28 @@
                     </div>
                 @endif
                 <h2 class="mb-4">Danh Sách Sản Phẩm</h2>
-                <a href="{{ route('admin.products.addProduct') }}" class="btn btn-primary mb-4">Thêm mới</a>
+                <a href="{{ route('admin.categories.addCategory') }}" class="btn btn-primary mb-4">Thêm mới</a>
                 <div class="card p-4">
                     <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
                                 <th>STT</th>
-                                <th>Tên sản phẩm</th>
-                                <th>Giá</th>
-                                <th>Danh mục</th>
-                                {{-- <th>Thương hiệu</th> --}}
-                                <th>Hình ảnh</th>
+                                <th>Tên danh mục</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($listProduct as $key => $value)
+                            @foreach ($listCategory as $key => $value)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $value->name }}</td>
-                                    <td>{{ $value->price }}</td>
-                                    <td>{{ $value->category ? $value->category->name : 'Không có danh mục' }}</td>
-                                    {{-- <td>{{ $value->brand ? $value->brand->name : 'Không có thương hiệu' }}</td> --}}
-                                    <td><img src="{{ Storage::url($value->image) }}" alt="" width="120"></td>
                                     <td>
-                                        <a href="{{ route('admin.products.detailProduct', $value->id) }}"
+                                        <a href="{{ route('admin.categories.detailCategory', $value->id) }}"
                                             class="btn btn-primary btn-sm">Chi tiết</a>
-                                        <a href="{{ route('admin.products.updateProduct', $value->id) }}"
+                                        <a href="{{ route('admin.categories.updateCategory', $value->id) }}"
                                             class="btn btn-warning btn-sm">Sửa</a>
                                         <form id="delete-product-form-{{ $value->id }}"
-                                            action="{{ route('admin.products.deleteProduct', ['idProduct' => $value->id]) }}"
+                                            action="{{ route('admin.categories.deleteCategory', ['idCategory' => $value->id]) }}"
                                             method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
@@ -94,7 +86,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $listProduct->links('pagination::bootstrap-5') }}
+                    {{ $listCategory->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </main>
@@ -102,9 +94,9 @@
 
     @push('scripts')
         <script>
-            function confirmDelete(productId) {
+            function confirmDelete(categoryId) {
                 if (confirm("Bạn có chắc chắn muốn xóa thương hiệu này?")) {
-                    document.getElementById('delete-product-form-' + productId).submit();
+                    document.getElementById('delete-product-form-' + categoryId).submit();
                 }
             }
         </script>

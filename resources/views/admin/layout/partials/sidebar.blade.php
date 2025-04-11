@@ -5,7 +5,9 @@
         <li class="nav-item"><a class="nav-link active" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Quản lý người dùng</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ route('admin.products.listProduct') }}">Quản lý sản phẩm</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('admin.categories.listCategory') }}">Quản lý danh mục</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ route('admin.brands.listBrand') }}">Quản lý thương hiệu</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('admin.posts.listPost') }}">Quản lý bài viết</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Báo cáo</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Thống kê</a></li>
     </ul>

@@ -8,12 +8,16 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProductController extends Controller
 {
     public function listProduct()
     {
-        $listProduct = Product::with(['brand', 'category'])->paginate(7);
+        $listProduct = Product::with(['brand', 'category'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(7);
         return view('admin.products.list-product')
             ->with(['listProduct' => $listProduct]);
     }
@@ -29,26 +33,33 @@ class ProductController extends Controller
 
     public function addPostProduct(Request $req)
     {
+        $validatedData = $req->validate([
+            'nameSP' => 'required|string|max:255',
+            'priceSP' => 'required|numeric|min:0',
+            'soluongSP' => 'nullable|integer|min:0',
+            'dmSP' => 'nullable|exists:categories,id',
+            'brandSP' => 'nullable|exists:brands,id',
+            'motaSP' => 'nullable|string',
+            'imageSP' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-        $linkImage = "";
+        $linkImage = null;
         if ($req->hasFile('imageSP')) {
             $image = $req->file('imageSP');
-            $newName = time() . "_" . $image->getClientOriginalName();
-            $linkStogate = 'uploads/products/';
-            $image->move(public_path($linkStogate), $newName);
-            $linkImage = $linkStogate . $newName;
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $linkImage = $image->storeAs('uploads/products', $imageName, 'public');
         }
 
-        $data = [
-            'name' => $req->nameSP,
-            'price' => $req->priceSP,
-            'stock' => $req->soluongSP,
-            'category_id' => $req->dmSP,
-            'brand_id' => $req->brandSP,
-            'description' => $req->motaSP,
+        Product::create([
+            'name' => $validatedData['nameSP'],
+            'price' => $validatedData['priceSP'],
+            'stock' => $validatedData['soluongSP'] ?? 0,
+            'category_id' => $validatedData['dmSP'],
+            'brand_id' => $validatedData['brandSP'],
+            'description' => $validatedData['motaSP'],
             'image' => $linkImage,
-        ];
-        Product::create($data);
+        ]);
+
         return redirect()->route('admin.products.listProduct')->with([
             'message' => 'Thêm mới thành công'
         ]);
@@ -63,65 +74,84 @@ class ProductController extends Controller
 
     public function deleteProduct(Request $req)
     {
-        $product = Product::where('id', $req->idProduct)->first();
+        $product = Product::find($req->idProduct);
 
-        // Kiểm tra nếu không tìm thấy product
         if (!$product) {
             return redirect()->route('admin.products.listProduct')->with([
                 'error' => 'Không tìm thấy sản phẩm cần xóa'
             ]);
         }
 
-        if (!empty($product->image)) {
-            File::delete(public_path($product->image));  // Xóa file ảnh nếu có
+        if ($product->image && Storage::disk('public')->exists($product->image)) {
+            Storage::disk('public')->delete($product->image);
         }
 
-        $product->delete();  // Xóa bản ghi trong database
+        $product->delete();
 
         return redirect()->route('admin.products.listProduct')->with([
-            'message' => 'Xóa mới thành công'
+            'message' => 'Xóa thành công'
         ]);
     }
 
     public function updateProduct($idProduct)
     {
-        $product = Product::where('id', $idProduct)->first();
+        $product = Product::find($idProduct);
         $listCategory = Category::all();
         $listBrand = Brand::all();
-        return view('admin.products.update-product')
-            ->with([
-                'product' => $product,
-                'listCategory' => $listCategory,
-                'listBrand' => $listBrand
-            ]);
+
+        if (!$product) {
+            return redirect()->route('admin.products.listProduct')->with('error', 'Không tìm thấy sản phẩm');
+        }
+
+        return view('admin.products.update-product', [
+            'product' => $product,
+            'listCategory' => $listCategory,
+            'listBrand' => $listBrand,
+        ]);
     }
 
     public function updatePatchProduct($idProduct, Request $req)
     {
-        $product = Product::where('id', $idProduct)->first();
+        $product = Product::find($idProduct);
+
+        if (!$product) {
+            return redirect()->route('admin.products.listProduct')->with('error', 'Không tìm thấy sản phẩm');
+        }
+
+        $validatedData = $req->validate([
+            'nameSP' => 'required|string|max:255',
+            'priceSP' => 'required|numeric|min:0',
+            'soluongSP' => 'nullable|integer|min:0',
+            'dmSP' => 'nullable|exists:categories,id',
+            'brandSP' => 'nullable|exists:brands,id',
+            'motaSP' => 'nullable|string',
+            'imageSP' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
         $linkImage = $product->image;
 
         if ($req->hasFile('imageSP')) {
-            File::delete(public_path($product->image)); // xóa file cũ
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
+            }
 
             $image = $req->file('imageSP');
-            $newName = time() . "_" . $image->getClientOriginalName();
-            $linkStogate = 'uploads/products/';
-            $image->move(public_path($linkStogate), $newName);
-            $linkImage = $linkStogate . $newName;
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $linkImage = $image->storeAs('uploads/products', $imageName, 'public');
         }
-        $data = [
-            'name' => $req->nameSP,
-            'price' => $req->priceSP,
-            'stock' => $req->soluongSP,
-            'category_id' => $req->dmSP,
-            'brand_id' => $req->brandSP,
-            'description' => $req->motaSP,
+
+        $product->update([
+            'name' => $validatedData['nameSP'],
+            'price' => $validatedData['priceSP'],
+            'stock' => $validatedData['soluongSP'] ?? 0,
+            'category_id' => $validatedData['dmSP'],
+            'brand_id' => $validatedData['brandSP'],
+            'description' => $validatedData['motaSP'],
             'image' => $linkImage,
-        ];
-        Product::where('id', $idProduct)->update($data);
+        ]);
+
         return redirect()->route('admin.products.listProduct')->with([
-            'message' => 'Xóa mới thành công'
+            'message' => 'Cập nhật thành công'
         ]);
     }
 }

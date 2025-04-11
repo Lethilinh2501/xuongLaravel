@@ -6,11 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
         'name',
@@ -43,5 +43,13 @@ class User extends Authenticatable
     public function cart()
     {
         return $this->hasOne(Cart::class, 'user_id', 'id');
+    }
+    public function post()
+    {
+        return $this->hasOne(Post::class, 'user_id', 'id');
+    }
+    public function post_comment()
+    {
+        return $this->hasOne(PostComment::class, 'user_id', 'id');
     }
 }

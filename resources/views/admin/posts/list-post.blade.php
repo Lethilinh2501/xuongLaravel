@@ -52,37 +52,35 @@
                         {{ session('message') }}
                     </div>
                 @endif
-                <h2 class="mb-4">Danh Sách Sản Phẩm</h2>
-                <a href="{{ route('admin.products.addProduct') }}" class="btn btn-primary mb-4">Thêm mới</a>
+                <h2 class="mb-4">Danh Sách Bài viết</h2>
+                <a href="{{ route('admin.posts.addPost') }}" class="btn btn-primary mb-4">Thêm mới</a>
                 <div class="card p-4">
-                    <table class="table table-bordered table-striped text-center">
-                        <thead class="table-dark">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark text-center">
                             <tr>
                                 <th>STT</th>
-                                <th>Tên sản phẩm</th>
-                                <th>Giá</th>
-                                <th>Danh mục</th>
-                                {{-- <th>Thương hiệu</th> --}}
-                                <th>Hình ảnh</th>
+                                <th>Tài khoản</th>
+                                <th>Tiêu đề</th>
+                                <th>Ngày đăng</th>
+                                <th>Ngày sửa</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($listProduct as $key => $value)
+                            @foreach ($listPost as $key => $value)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $value->name }}</td>
-                                    <td>{{ $value->price }}</td>
-                                    <td>{{ $value->category ? $value->category->name : 'Không có danh mục' }}</td>
-                                    {{-- <td>{{ $value->brand ? $value->brand->name : 'Không có thương hiệu' }}</td> --}}
-                                    <td><img src="{{ Storage::url($value->image) }}" alt="" width="120"></td>
+                                    <td>{{ $value->user ? $value->user->name : 'Không có tài khoản' }}</td>
+                                    <td>{{ $value->title }}</td>
+                                    <td>{{ $value->created_at }}</td>
+                                    <td>{{ $value->updated_at }}</td>
                                     <td>
-                                        <a href="{{ route('admin.products.detailProduct', $value->id) }}"
+                                        <a href="{{ route('admin.posts.detailPost', $value->id) }}"
                                             class="btn btn-primary btn-sm">Chi tiết</a>
-                                        <a href="{{ route('admin.products.updateProduct', $value->id) }}"
+                                        <a href="{{ route('admin.posts.updatePost', $value->id) }}"
                                             class="btn btn-warning btn-sm">Sửa</a>
                                         <form id="delete-product-form-{{ $value->id }}"
-                                            action="{{ route('admin.products.deleteProduct', ['idProduct' => $value->id]) }}"
+                                            action="{{ route('admin.posts.deletePost', ['idPost' => $value->id]) }}"
                                             method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
@@ -94,7 +92,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $listProduct->links('pagination::bootstrap-5') }}
+                    {{ $listPost->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </main>
@@ -102,9 +100,9 @@
 
     @push('scripts')
         <script>
-            function confirmDelete(productId) {
-                if (confirm("Bạn có chắc chắn muốn xóa thương hiệu này?")) {
-                    document.getElementById('delete-product-form-' + productId).submit();
+            function confirmDelete(postId) {
+                if (confirm("Bạn có chắc chắn muốn xóa bài viết này?")) {
+                    document.getElementById('delete-product-form-' + postId).submit();
                 }
             }
         </script>

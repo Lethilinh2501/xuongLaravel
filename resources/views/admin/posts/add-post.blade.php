@@ -46,9 +46,9 @@
     <!-- Main Section -->
     <main class="container-fluid flex-grow-1">
         <div class="container mt-4">
-            <h2 class="mb-4">Thêm Sản Phẩm</h2>
+            <h2 class="mb-4">Thêm Bài Viết</h2>
             <div class="card p-4">
-                <form action="{{ route('admin.products.addPostProduct') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.posts.addPostPost') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label for="nameSP" class="form-label">Tên sản phẩm</label>
@@ -79,7 +79,7 @@
                         <div class="mb-3 col-md-6">
                             <label for="brandSP" class="form-label">Thương hiệu</label>
                             <select class="form-select" id="brandSP" name="brandSP">
-                                <option value="" hidden>Chọn thương hiệu</option>
+                                <option selected>Chọn thương hiệu</option>
                                 @foreach ($listBrand as $brand)
                                     <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                                 @endforeach

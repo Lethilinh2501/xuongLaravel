@@ -102,7 +102,7 @@
                         <input type="file" class="form-control" id="imageSP" name="imageSP">
                         <div class="mt-2">
                             @if ($product->image)
-                                <img src="{{ asset($product->image) }}" alt="Hình ảnh sản phẩm" width="150">
+                                <img src="{{ Storage::url($product->image) }}" alt="Hình ảnh sản phẩm" width="150">
                             @else
                                 <p>Chưa có ảnh</p>
                             @endif

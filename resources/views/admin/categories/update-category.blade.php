@@ -46,22 +46,16 @@
     <!-- Main Section -->
     <main class="container-fluid flex-grow-1">
         <div class="container mt-4">
-            <h2 class="mb-4">Chỉnh Sửa Thương Hiệu</h2>
+            <h2 class="mb-4">Chỉnh Sửa Danh Mục</h2>
             <div class="card p-4">
-                <form action="{{ route('admin.brands.updatePatchBrand', $brand->id) }}" method="POST"
+                <form action="{{ route('admin.categories.updatePatchCategory', $category->id) }}" method="POST"
                     enctype="multipart/form-data">
                     @method('patch')
                     @csrf
                     <div class="mb-3">
                         <label for="nameSP" class="form-label">Tên thương hiệu</label>
                         <input type="text" class="form-control" id="nameSP" name="nameSP"
-                            placeholder="Nhập tên sản phẩm" value="{{ $brand->name }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="imageSP" class="form-label">Hình ảnh</label>
-                        <img src="{{ asset('storage/' . $brand->logo) }}" alt="Brand Logo"
-                            class="img-thumbnail rounded mx-auto d-block" width="120"> <br>
-                        <input type="file" class="form-control" id="imageSP" name="imageSP">
+                            placeholder="Nhập tên sản phẩm" value="{{ $category->name }}">
                     </div>
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
                 </form>

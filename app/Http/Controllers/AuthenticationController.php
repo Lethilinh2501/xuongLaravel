@@ -12,41 +12,40 @@ class AuthenticationController extends Controller
 {
     public function login()
     {
-        return view('client.login');
+        return view('login');
     }
     public function postLogin(Request $req)
     {
-        $dataUserLogin = [
+        $credentials = [
             'email' => $req->email,
             'password' => $req->password,
         ];
 
         $remember = $req->has('remember');
 
-        if (Auth::attempt($dataUserLogin, $remember)) {
-            //logout hết các tài khoản khác
+        if (Auth::attempt($credentials, $remember)) {
             Session::where('user_id', Auth::id())->delete();
-            // Tạo phiên đăng nhập mới
             session()->put('user_id', Auth::id());
 
-            // Đăng nhập thành công
-            // dd('Đăng nhập thành công', Auth::user());
-            if (Auth::attempt(['email' => $req->email, 'password' => $req->password])) {
+            $user = Auth::user();
+
+            if ($user->role_id == 2) {
                 return redirect()->route('admin.products.listProduct')->with([
                     'message' => 'Đăng nhập thành công'
                 ]);
             } else {
-                // Đăng nhập vào user
-                echo 'Đăng nhập  vào user';
+                Auth::logout(); // Logout vì không đủ quyền
+                return redirect()->route('login')->with([
+                    'message' => 'Bạn không có quyền truy cập trang admin. Vui lòng liên hệ quản trị viên.'
+                ]);
             }
         } else {
-            // Đăng nhập thất bại
-            // dd('Đăng nhập thất bại', $dataUserLogin);
             return redirect()->back()->with([
-                'message' => 'email hoặc mật khẩu không đúng'
+                'message' => 'Email hoặc mật khẩu không đúng'
             ]);
         }
     }
+
     public function logout()
     {
         Auth::logout();
@@ -58,33 +57,33 @@ class AuthenticationController extends Controller
 
     public function register()
     {
-        return view('client.register');
+        return view('register');
     }
 
     public function postRegister(Request $req)
     {
         $check = User::where('email', $req->email)->exists();
+
         if ($check) {
             return redirect()->back()->with([
-                'message' => 'tài khoản đã tồn tại'
+                'message' => 'Tài khoản đã tồn tại'
             ]);
-        } else {
-            $data = [
-                'name' => $req->name,
-                'email' => $req->email,
-                'password' => Hash::make($req->password),
-                'role_id' => 1,
-            ];
-            $newUser = User::create($data);
-            Auth::login($newUser); // tự động cho user này
-            // return dashboard (trang chủ)
-
-            return redirect()->route('login')->with([
-                'message' => 'Đăng kí thành công. vui lòng đăng nhập.'
-            ]);
-            // đki sau đó quay trl trang đn
-            //     'message' => 'Đăng kí thành công. vui lòng đăng nhập.'
-            // ]);
         }
+
+        $data = [
+            'name' => $req->name,
+            'email' => $req->email,
+            'password' => Hash::make($req->password),
+            'role_id' => 1,
+        ];
+
+        // dd($data); // Xem thử dữ liệu đúng chưa
+
+        $newUser = User::create($data);
+        Auth::login($newUser);
+
+        return redirect()->route('login')->with([
+            'message' => 'Đăng kí thành công. Vui lòng đăng nhập.'
+        ]);
     }
 }

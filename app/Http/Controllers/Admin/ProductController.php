@@ -7,7 +7,6 @@ use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 

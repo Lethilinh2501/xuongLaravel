@@ -3,12 +3,13 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PostCommentController;
 use App\Http\Controllers\Admin\PostController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\AuthenticationController;
-
+use App\Http\Controllers\Admin\UserController;
 
 // Route::get('/', function () {
 //     $usersXuong1 = DB::connection('mysql')->table('users')->get();
@@ -30,6 +31,18 @@ Route::group([
 ],  function () {
     // Dashboard Admin
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+    // Quản lý user
+    Route::group([
+        'prefix' => 'users',
+        'as' => 'users.'
+    ], function () {
+        Route::get('/', [UserController::class, 'listUser'])->name('listUser');
+        Route::get('/detail-user/{idUser}', [UserController::class, 'detailUser'])->name('detailUser');
+        Route::get('/update-user/{idUser}', [UserController::class, 'updateUser'])->name('updateUser');
+        Route::patch('/update-user/{idUser}', [UserController::class, 'updatePatchUser'])->name('updatePatchUser');
+        Route::patch('/toggle-status/{idUser}', [UserController::class, 'toggleStatus'])->name('toggleStatus');
+    });
 
     // Quản lý brand
     Route::group([
@@ -83,5 +96,16 @@ Route::group([
         Route::delete('/delete-post', [PostController::class, 'deletePost'])->name('deletePost');
         Route::get('update-post/{idPost}', [PostController::class, 'updatePost'])->name('updatePost');
         Route::patch('update-post/{idPost}', [PostController::class, 'updatePatchPost'])->name('updatePatchPost');
+    });
+
+    // Quản lý PostComment
+    Route::group([
+        'prefix' => 'postcomments',
+        'as' => 'postcomments.'
+    ], function () {
+        Route::get('/', [PostCommentController::class, 'listPostComment'])->name('listPostComment');
+        Route::get('/detail-postcomment/{idPostComment}', [PostCommentController::class, 'detailPostComment'])->name('detailPostComment');
+        Route::delete('/delete-postcomment', [PostCommentController::class, 'deletePostComment'])->name('deletePostComment');
+
     });
 });

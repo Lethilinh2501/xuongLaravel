@@ -45,7 +45,7 @@
     @endpush
 
     @section('content')
-        <main class="container-fluid flex-grow-1">
+        <main class="container-fluid flex-grow-1 text-center">
             <div class="container mt-4">
                 @if (session('message'))
                     <div class="alert alert-primary" role="alert">

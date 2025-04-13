@@ -52,41 +52,50 @@
                         {{ session('message') }}
                     </div>
                 @endif
-                <h2 class="mb-4">Danh Sách Danh Mục</h2>
-                <a href="{{ route('admin.categories.addCategory') }}" class="btn btn-primary mb-4">Thêm mới</a>
+                <h2 class="mb-4">Danh Sách Người Dùng</h2>
                 <div class="card p-4">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
                                 <th>STT</th>
-                                <th>Tên danh mục</th>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Vai trò</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($listCategory as $key => $value)
+                            @foreach ($listUser as $key => $value)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $value->name }}</td>
+                                    <td>{{ $value->email }}</td>
+                                    <td>{{ $value->roles ? $value->roles->name : 'Chưa xác định' }}</td>
                                     <td>
-                                        <a href="{{ route('admin.categories.detailCategory', $value->id) }}"
+                                        <a href="{{ route('admin.users.detailUser', $value->id) }}"
                                             class="btn btn-primary btn-sm">Chi tiết</a>
-                                        <a href="{{ route('admin.categories.updateCategory', $value->id) }}"
+                                        <a href="{{ route('admin.users.updateUser', $value->id) }}"
                                             class="btn btn-warning btn-sm">Sửa</a>
-                                        <form id="delete-product-form-{{ $value->id }}"
-                                            action="{{ route('admin.categories.deleteCategory', ['idCategory' => $value->id]) }}"
-                                            method="POST" style="display: inline;">
+                                        <form id="toggle-status-form-{{ $value->id }}"
+                                            action="{{ route('admin.users.toggleStatus', ['idUser' => $value->id]) }}"
+                                            method="POST" style="display:inline;">
                                             @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                onclick="confirmDelete({{ $value->id }})">Xóa</button>
+                                            @method('PATCH')
+                                            @if ($value->status)
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                    onclick="confirmToggle({{ $value->id }}, 'ẩn')">Ẩn</button>
+                                            @else
+                                                <button type="button" class="btn btn-success btn-sm"
+                                                    onclick="confirmToggle({{ $value->id }}, 'hiện')">Hiện</button>
+                                            @endif
                                         </form>
+
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $listCategory->links('pagination::bootstrap-5') }}
+                    {{ $listUser->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </main>
@@ -94,9 +103,9 @@
 
     @push('scripts')
         <script>
-            function confirmDelete(categoryId) {
-                if (confirm("Bạn có chắc chắn muốn xóa thương hiệu này?")) {
-                    document.getElementById('delete-product-form-' + categoryId).submit();
+            function confirmToggle(userId, actionText) {
+                if (confirm(`Bạn có chắc chắn muốn ${actionText} người dùng này?`)) {
+                    document.getElementById('toggle-status-form-' + userId).submit();
                 }
             }
         </script>

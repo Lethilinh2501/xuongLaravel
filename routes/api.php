@@ -4,25 +4,10 @@
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthenController;
+use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Http\Request;
 
 // CRUD () => REST API
-
-// Products API
-
-Route::prefix('products')->middleware('auth:sanctum')->group(function () {
-    // http://127.0.0.1:8000/api/products/
-    Route::get('/', [ProductController::class, 'index']);
-    // http://127.0.0.1:8000/api/products/1
-    Route::get('/{id}', [ProductController::class, 'show']);
-    // http://127.0.0.1:8000/api/products/add
-    Route::post('/add', [ProductController::class, 'store']);
-    // http://127.0.0.1:8000/api/products/update/1
-    Route::patch('update/{id}', [ProductController::class, 'update']);
-    // http://127.0.0.1:8000/api/products/delete/1
-    Route::delete('delete/{id}', [ProductController::class, 'destroy']);
-});
-
 Route::post('/register', [AuthenController::class, 'postRegister']);
 Route::post('/login', [AuthenController::class, 'postLogin']);
 
@@ -32,4 +17,21 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::delete('/logout', [AuthenController::class, 'logout']);
+});
+// Products API
+// http://127.0.0.1:8000/api/products/
+Route::prefix('products')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/{id}', [ProductController::class, 'show']);
+    Route::post('/add', [ProductController::class, 'store']);
+    Route::patch('update/{id}', [ProductController::class, 'update']);
+    Route::delete('delete/{id}', [ProductController::class, 'destroy']);
+});
+
+Route::prefix('categories')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [CategoryController::class, 'index']);
+    Route::get('/{id}', [CategoryController::class, 'show']);
+    Route::post('/add', [CategoryController::class, 'store']);
+    Route::patch('update/{id}', [CategoryController::class, 'update']);
+    Route::delete('delete/{id}', [CategoryController::class, 'destroy']);
 });

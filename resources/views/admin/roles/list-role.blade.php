@@ -52,31 +52,27 @@
                         {{ session('message') }}
                     </div>
                 @endif
-                <h2 class="mb-4">Danh Sách Thương Hiệu</h2>
-                <a href="{{ route('admin.brands.addBrand') }}" class="btn btn-primary mb-4">Thêm mới</a>
+                <h2 class="mb-4">Danh Sách Quyền Truy Cập</h2>
+                <a href="{{ route('admin.roles.addRole') }}" class="btn btn-primary mb-4">Thêm mới</a>
                 <div class="card p-4">
                     <table class="table table-bordered table-striped">
                         <thead class="table-dark">
                             <tr>
                                 <th>STT</th>
-                                <th>Tên thương hiệu</th>
-                                <th>Logo</th>
+                                <th>Tên quyền</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($listBrand as $key => $value)
+                            @foreach ($listRole as $key => $value)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $value->name }}</td>
-                                    <td><img src="{{ Storage::url($value->logo) }}" alt="Brand Logo" width="120"></td>
                                     <td>
-                                        <a href="{{ route('admin.brands.detailBrand', $value->id) }}"
-                                            class="btn btn-primary btn-sm">Chi tiết</a>
-                                        <a href="{{ route('admin.brands.updateBrand', $value->id) }}"
+                                        <a href="{{ route('admin.roles.updateRole', $value->id) }}"
                                             class="btn btn-warning btn-sm">Sửa</a>
-                                        <form id="delete-brand-form-{{ $value->id }}"
-                                            action="{{ route('admin.brands.deleteBrand', ['idBrand' => $value->id]) }}"
+                                        <form id="delete-role-form-{{ $value->id }}"
+                                            action="{{ route('admin.roles.deleteRole', ['idRole' => $value->id]) }}"
                                             method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
@@ -90,7 +86,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $listBrand->links('pagination::bootstrap-5') }}
+                    {{ $listRole->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </main>
@@ -98,9 +94,9 @@
 
     @push('scripts')
         <script>
-            function confirmDelete(brandId) {
+            function confirmDelete(roleId) {
                 if (confirm("Bạn có chắc chắn muốn xóa thương hiệu này?")) {
-                    document.getElementById('delete-brand-form-' + brandId).submit();
+                    document.getElementById('delete-role-form-' + roleId).submit();
                 }
             }
         </script>

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PostController;
 use Illuminate\Support\Facades\Route;
 // use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -42,6 +43,20 @@ Route::group([
         Route::get('/update-user/{idUser}', [UserController::class, 'updateUser'])->name('updateUser');
         Route::patch('/update-user/{idUser}', [UserController::class, 'updatePatchUser'])->name('updatePatchUser');
         Route::patch('/toggle-status/{idUser}', [UserController::class, 'toggleStatus'])->name('toggleStatus');
+    });
+
+    // Quản lý quyền Admin
+    Route::group([
+        'prefix' => 'roles',
+        'as' => 'roles.'
+    ], function () {
+        Route::get('/', [RoleController::class, 'listRole'])->name('listRole');
+        Route::get('/add-role', [RoleController::class, 'addRole'])->name('addRole');
+        Route::post('/add-role', [RoleController::class, 'addPostRole'])->name('addPostRole');
+        Route::get('/detail-role/{idRole}', [RoleController::class, 'detailRole'])->name('detailRole');
+        Route::get('/update-role/{idRole}', [RoleController::class, 'updateRole'])->name('updateRole');
+        Route::patch('/update-role/{idRole}', [RoleController::class, 'updatePatchRole'])->name('updatePatchRole');
+        Route::delete('/delete-role', [RoleController::class, 'deleteRole'])->name('deleteRole');
     });
 
     // Quản lý brand
@@ -106,6 +121,5 @@ Route::group([
         Route::get('/', [PostCommentController::class, 'listPostComment'])->name('listPostComment');
         Route::get('/detail-postcomment/{idPostComment}', [PostCommentController::class, 'detailPostComment'])->name('detailPostComment');
         Route::delete('/delete-postcomment', [PostCommentController::class, 'deletePostComment'])->name('deletePostComment');
-
     });
 });

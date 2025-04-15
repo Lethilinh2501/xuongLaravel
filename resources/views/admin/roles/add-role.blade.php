@@ -46,20 +46,17 @@
     <!-- Main Section -->
     <main class="container-fluid flex-grow-1">
         <div class="container mt-4">
-            <h2 class="mb-4">Thêm Thương Hiệu</h2>
+            <h2 class="mb-4 text-center">Thêm Quyền</h2>
             <div class="card p-4">
-                <form action="{{ route('admin.brands.addPostBrand') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.roles.addPostRole') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <label for="name" class="form-label">Tên thương hiệu</label>
-                        <input type="text" class="form-control" id="name" name="name"
-                            placeholder="Nhập tên sản phẩm">
+                        <label for="nameSP" class="form-label">Tên quyền</label>
+                        <input type="text" class="form-control" id="nameSP" name="nameSP"
+                            placeholder="Nhập tên quyền">
                     </div>
-                    <div class="mb-3">
-                        <label for="logo" class="form-label">Hình ảnh</label>
-                        <input type="file" class="form-control" id="logo" name="logo">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Thêm mới</button>
+
+                    <button type="submit" class="btn btn-primary">Thêm quyền</button>
                 </form>
             </div>
         </div>

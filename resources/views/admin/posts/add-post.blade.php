@@ -1,4 +1,5 @@
 @extends('admin.layout.default')
+
 @push('style')
     <style>
         body {
@@ -51,51 +52,20 @@
                 <form action="{{ route('admin.posts.addPostPost') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <label for="nameSP" class="form-label">Tên sản phẩm</label>
-                        <input type="text" class="form-control" id="nameSP" name="nameSP"
-                            placeholder="Nhập tên sản phẩm">
+                        <label for="title" class="form-label">Tiêu đề</label>
+                        <input type="text" class="form-control" id="title" name="title"
+                            placeholder="Nhập tiêu đề bài viết">
                     </div>
-                    <div class="row">
-                        <div class="mb-3 col-md-6">
-                            <label for="priceSP" class="form-label">Giá</label>
-                            <input type="number" class="form-control" id="priceSP" name="priceSP" placeholder="Nhập giá">
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="soluongSP" class="form-label">Số lượng</label>
-                            <input type="number" class="form-control" id="soluongSP" name="soluongSP"
-                                placeholder="Nhập số lượng">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="mb-3 col-md-6">
-                            <label for="dmSP" class="form-label">Danh mục</label>
-                            <select class="form-select" id="dmSP" name="dmSP">
-                                <option selected>Chọn danh mục</option>
-                                @foreach ($listCategory as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="brandSP" class="form-label">Thương hiệu</label>
-                            <select class="form-select" id="brandSP" name="brandSP">
-                                <option selected>Chọn thương hiệu</option>
-                                @foreach ($listBrand as $brand)
-                                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                @endforeach
 
-                            </select>
-                        </div>
-                    </div>
                     <div class="mb-3">
-                        <label for="imageSP" class="form-label">Hình ảnh</label>
-                        <input type="file" class="form-control" id="imageSP" name="imageSP">
+                        <label for="content" class="form-label">Nội dung</label>
+                        <textarea class="form-control" id="content" name="content" rows="5" placeholder="Nhập nội dung bài viết..."></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="motaSP" class="form-label">Mô tả</label>
-                        <textarea class="form-control" id="motaSP" name="motaSP" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+
+                    <!-- Ẩn trường 'user_id' và tự động gán giá trị cho người đăng nhập -->
+                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+
+                    <button type="submit" class="btn btn-primary">Thêm bài viết</button>
                 </form>
             </div>
         </div>

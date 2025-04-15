@@ -53,15 +53,15 @@
                     @method('patch')
                     @csrf
                     <div class="mb-3">
-                        <label for="nameSP" class="form-label">Tên thương hiệu</label>
-                        <input type="text" class="form-control" id="nameSP" name="nameSP"
+                        <label for="name" class="form-label">Tên thương hiệu</label>
+                        <input type="text" class="form-control" id="name" name="name"
                             placeholder="Nhập tên sản phẩm" value="{{ $brand->name }}">
                     </div>
                     <div class="mb-3">
-                        <label for="imageSP" class="form-label">Hình ảnh</label>
-                        <img src="{{ asset('storage/' . $brand->logo) }}" alt="Brand Logo"
+                        <label for="logo" class="form-label">Hình ảnh</label>
+                        <img src="{{ Storage::url($brand->logo) }}" alt="Brand Logo"
                             class="img-thumbnail rounded mx-auto d-block" width="120"> <br>
-                        <input type="file" class="form-control" id="imageSP" name="imageSP">
+                        <input type="file" class="form-control" id="logo" name="logo">
                     </div>
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
                 </form>

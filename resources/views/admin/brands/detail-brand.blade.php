@@ -57,7 +57,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="imageSP" class="form-label">Hình ảnh</label><br>
-                        <img src="{{ asset($brand->logo) }}" alt="" class="img-thumbnail rounded mx-auto d-block" width="300">
+                        <img src="{{ Storage::url($brand->logo) }}" alt=""
+                            class="img-thumbnail rounded mx-auto d-block" width="300">
                     </div>
                     <a href="{{ route('admin.brands.listBrand') }}" class="btn btn-primary">Quay lại</a>
                 </form>
